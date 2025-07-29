@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizCash - Earn Money With Quizzes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+        .package-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: conic-gradient(#4f46e5 0%, transparent 0%);
+            position: relative;
+        }
+        .timer-circle::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        .timer-text {
+            position: relative;
+            z-index: 1;
+        }
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover {
+            background-color: #e0e7ff;
+            border-color: #4f46e5;
+        }
+        .quiz-option.selected {
+            background-color: #c7d2fe;
+            border-color: #4f46e5;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 3s ease-in infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+        .cube-scene {
+            perspective: 800px;
+            width: 200px;
+            height: 200px;
+        }
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-100px);
+            animation: rotate 10s infinite linear;
+        }
+        .cube-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .front { transform: rotateY(0deg) translateZ(100px); background: rgba(79, 70, 229, 0.8); }
+        .right { transform: rotateY(90deg) translateZ(100px); background: rgba(124, 58, 237, 0.8); }
+        .back { transform: rotateY(180deg) translateZ(100px); background: rgba(79, 70, 229, 0.8); }
+        .left { transform: rotateY(-90deg) translateZ(100px); background: rgba(124, 58, 237, 0.8); }
+        .top { transform: rotateX(90deg) translateZ(100px); background: rgba(99, 102, 241, 0.8); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); background: rgba(99, 102, 241, 0.8); }
+        @keyframes rotate {
+            0% { transform: translateZ(-100px) rotateX(0deg) rotateY(0deg); }
+            100% { transform: translateZ(-100px) rotateX(360deg) rotateY(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="min-h-screen flex flex-col">
+        <header class="gradient-bg text-white p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">QuizCash</h1>
+                <div class="text-sm">Earn While You Learn</div>
+            </div>
+        </header>
+
+        <div class="flex-grow flex items-center justify-center p-4">
+            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800">Welcome to QuizCash</h2>
+                    <p class="text-gray-600 mt-2">Sign in to start earning</p>
+                </div>
+                
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="fullname" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="fullname" name="fullname" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animation Page -->
+    <div id="animation-page" class="min-h-screen flex flex-col hidden">
+        <header class="gradient-bg text-white p-4 shadow-md">
+            <div class="container mx-auto">
+                <h1 class="text-2xl font-bold">QuizCash</h1>
+            </div>
+        </header>
+
+        <div class="flex-grow flex flex-col items-center justify-center p-4 bg-gradient-to-b from-indigo-100 to-purple-100">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-indigo-800">Welcome to QuizCash!</h2>
+                <p class="text-gray-700 mt-2">Answer questions correctly and win cash prizes</p>
+            </div>
+            
+            <div class="cube-scene mb-10">
+                <div class="cube">
+                    <div class="cube-face front">Answer</div>
+                    <div class="cube-face back">Learn</div>
+                    <div class="cube-face right">Win</div>
+                    <div class="cube-face left">Earn</div>
+                    <div class="cube-face top">Quiz</div>
+                    <div class="cube-face bottom">Cash</div>
+                </div>
+            </div>
+            
+            <button id="skip-animation" class="mt-8 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors">
+                Go to Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile-page" class="min-h-screen flex flex-col hidden">
+        <header class="gradient-bg text-white p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">QuizCash</h1>
+                <div id="user-name" class="font-medium"></div>
+            </div>
+        </header>
+
+        <div class="container mx-auto p-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-2xl font-bold text-gray-800">Your Profile</h2>
+                        <div id="profile-email" class="text-gray-600 mt-1"></div>
+                        <div id="profile-phone" class="text-gray-600"></div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-semibold text-gray-800 mb-2">Quiz Window</div>
+                        <div class="flex items-center justify-center space-x-4">
+                            <div>
+                                <div id="countdown-timer" class="timer-circle">
+                                    <div class="timer-text text-xl font-bold text-indigo-600">00:00:00</div>
+                                </div>
+                                <div id="countdown-status" class="mt-2 text-sm font-medium text-center text-indigo-600">Checking status...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Available Packages</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Package 1 -->
+                <div class="package-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="gradient-bg text-white p-4">
+                        <h4 class="text-xl font-bold">Basic Package</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-sm">Investment</div>
+                            <div class="text-2xl font-bold">₦200</div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="text-gray-600">Potential Reward</div>
+                            <div class="text-xl font-bold text-green-600">₦500</div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">50+ Questions</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">5 Minutes Timer</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">100% Win Rate (80%+ Score)</span>
+                            </div>
+                        </div>
+                        <button class="payment-btn w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors" data-package="basic" data-amount="200" data-reward="500" data-time="300">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 2 -->
+                <div class="package-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="gradient-bg text-white p-4">
+                        <h4 class="text-xl font-bold">Standard Package</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-sm">Investment</div>
+                            <div class="text-2xl font-bold">₦1,000</div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="text-gray-600">Potential Reward</div>
+                            <div class="text-xl font-bold text-green-600">₦2,500</div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">50+ Questions</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">3 Minutes 50 Seconds Timer</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">100% Win Rate (80%+ Score)</span>
+                            </div>
+                        </div>
+                        <button class="payment-btn w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors" data-package="standard" data-amount="1000" data-reward="2500" data-time="230">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="package-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="gradient-bg text-white p-4">
+                        <h4 class="text-xl font-bold">Premium Package</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-sm">Investment</div>
+                            <div class="text-2xl font-bold">₦1,800</div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="text-gray-600">Potential Reward</div>
+                            <div class="text-xl font-bold text-green-600">₦3,000</div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">50+ Questions</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">2 Minutes 50 Seconds Timer</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-indigo-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="text-sm">100% Win Rate (80%+ Score)</span>
+                            </div>
+                        </div>
+                        <button class="payment-btn w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors" data-package="premium" data-amount="1800" data-reward="3000" data-time="170">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Payment Details</h3>
+                <button id="close-payment-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div class="bg-indigo-50 border border-indigo-200 rounded-md p-4 mb-4">
+                    <div class="text-sm text-gray-600 mb-2">Bank Name</div>
+                    <div class="font-medium text-gray-800">Branch International Financial Services</div>
+                </div>
+                
+                <div class="bg-indigo-50 border border-indigo-200 rounded-md p-4">
+                    <div class="text-sm text-gray-600 mb-2">Account Number</div>
+                    <div class="flex justify-between items-center">
+                        <div class="font-medium text-gray-800">5514538163</div>
+                        <button id="copy-account" class="text-indigo-600 hover:text-indigo-800">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3 mb-6">
+                <div class="flex">
+                    <svg class="w-5 h-5 text-yellow-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div class="text-sm text-yellow-700">
+                        <span class="font-medium">Important:</span> Please make the payment of <span id="payment-amount" class="font-bold"></span> to the account above before proceeding.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button id="payment-confirmed" class="py-2 px-6 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                    I've Paid
+                </button>
+            </div>
+            
+            <div class="mt-4 text-center text-xs text-gray-500">
+                <div class="bg-red-50 border border-red-200 rounded-md p-2 text-red-700">
+                    DEMO ONLY: No actual payment required
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quiz-page" class="min-h-screen flex flex-col hidden">
+        <header class="gradient-bg text-white p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">QuizCash</h1>
+                <div class="flex items-center space-x-4">
+                    <div id="quiz-package-name" class="font-medium"></div>
+                    <div id="quiz-timer" class="bg-white text-indigo-600 px-3 py-1 rounded-full font-bold"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto p-4 flex-grow">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Quiz in Progress</h2>
+                        <div class="text-sm text-gray-600">Answer all questions before time runs out</div>
+                    </div>
+                    <div>
+                        <span id="current-question-num" class="font-bold text-indigo-600">1</span>
+                        <span class="text-gray-600">/</span>
+                        <span id="total-questions" class="text-gray-600">10</span>
+                    </div>
+                </div>
+                
+                <div id="question-container" class="mb-6">
+                    <h3 id="question-text" class="text-lg font-medium text-gray-800 mb-4"></h3>
+                    
+                    <div id="options-container" class="space-y-3">
+                        <!-- Options will be inserted here -->
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="prev-question" class="py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                        Previous
+                    </button>
+                    <button id="next-question" class="py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                        Next
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="submit-quiz" class="py-3 px-8 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                    Submit Answers
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <div id="results-content">
+                <!-- Content will be inserted here -->
+            </div>
+            
+            <div class="mt-6 flex justify-center">
+                <button id="close-results" class="py-2 px-6 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                    Return to Profile
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User data storage
+        let userData = {
+            fullname: '',
+            email: '',
+            phone: '',
+            currentPackage: null,
+            quizTime: 0,
+            answers: []
+        };
+
+        // Quiz data
+        const quizQuestions = [
+            {
+                question: "What is the capital of Nigeria?",
+                options: ["Lagos", "Abuja", "Kano", "Port Harcourt"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which Nigerian currency is used?",
+                options: ["Cedi", "Naira", "Rand", "Dollar"],
+                correctAnswer: 1
+            },
+            {
+                question: "Who was Nigeria's first president?",
+                options: ["Nnamdi Azikiwe", "Tafawa Balewa", "Olusegun Obasanjo", "Goodluck Jonathan"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which river is the longest in Nigeria?",
+                options: ["Niger River", "Benue River", "Osun River", "Cross River"],
+                correctAnswer: 0
+            },
+            {
+                question: "What year did Nigeria gain independence?",
+                options: ["1957", "1960", "1963", "1965"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which Nigerian state is known as the 'Centre of Excellence'?",
+                options: ["Abuja", "Lagos", "Kano", "Rivers"],
+                correctAnswer: 1
+            },
+            {
+                question: "What is the largest ethnic group in Nigeria?",
+                options: ["Yoruba", "Igbo", "Hausa", "Fulani"],
+                correctAnswer: 2
+            },
+            {
+                question: "Which Nigerian won the Nobel Prize for Literature?",
+                options: ["Chinua Achebe", "Wole Soyinka", "Chimamanda Adichie", "Ben Okri"],
+                correctAnswer: 1
+            },
+            {
+                question: "How many states are in Nigeria?",
+                options: ["36", "37", "42", "30"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which Nigerian footballer won African Footballer of the Year multiple times?",
+                options: ["Jay-Jay Okocha", "Nwankwo Kanu", "Mikel Obi", "Victor Osimhen"],
+                correctAnswer: 1
+            }
+        ];
+
+        // Generate more questions to reach 50+
+        for (let i = 0; i < 40; i++) {
+            quizQuestions.push({
+                question: `Sample Question ${i + 11}?`,
+                options: ["Option A", "Option B", "Option C", "Option D"],
+                correctAnswer: Math.floor(Math.random() * 4)
+            });
+        }
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const animationPage = document.getElementById('animation-page');
+        const profilePage = document.getElementById('profile-page');
+        const quizPage = document.getElementById('quiz-page');
+        const loginForm = document.getElementById('login-form');
+        const skipAnimation = document.getElementById('skip-animation');
+        const paymentModal = document.getElementById('payment-modal');
+        const closePaymentModal = document.getElementById('close-payment-modal');
+        const paymentAmount = document.getElementById('payment-amount');
+        const paymentConfirmed = document.getElementById('payment-confirmed');
+        const copyAccount = document.getElementById('copy-account');
+        const resultsModal = document.getElementById('results-modal');
+        const closeResults = document.getElementById('close-results');
+        const prevQuestion = document.getElementById('prev-question');
+        const nextQuestion = document.getElementById('next-question');
+        const submitQuiz = document.getElementById('submit-quiz');
+
+        // Current quiz state
+        let currentQuiz = {
+            package: '',
+            amount: 0,
+            reward: 0,
+            timeLimit: 0,
+            questions: [],
+            currentQuestion: 0,
+            answers: [],
+            timeRemaining: 0,
+            timer: null,
+            submissionTime: null
+        };
+
+        // Login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            userData.fullname = document.getElementById('fullname').value;
+            userData.email = document.getElementById('email').value;
+            userData.phone = document.getElementById('phone').value;
+            
+            loginPage.classList.add('hidden');
+            animationPage.classList.remove('hidden');
+        });
+
+        // Skip animation button
+        skipAnimation.addEventListener('click', function() {
+            animationPage.classList.add('hidden');
+            profilePage.classList.remove('hidden');
+            
+            // Set profile information
+            document.getElementById('user-name').textContent = userData.fullname;
+            document.getElementById('profile-email').textContent = userData.email;
+            document.getElementById('profile-phone').textContent = userData.phone;
+            
+            // Start countdown timer
+            startCountdownTimer();
+        });
+
+        // Payment buttons
+        document.querySelectorAll('.payment-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const packageName = this.getAttribute('data-package');
+                const amount = this.getAttribute('data-amount');
+                const reward = this.getAttribute('data-reward');
+                const time = this.getAttribute('data-time');
+                
+                currentQuiz.package = packageName;
+                currentQuiz.amount = amount;
+                currentQuiz.reward = reward;
+                currentQuiz.timeLimit = parseInt(time);
+                
+                paymentAmount.textContent = `₦${amount}`;
+                paymentModal.classList.remove('hidden');
+            });
+        });
+
+        // Close payment modal
+        closePaymentModal.addEventListener('click', function() {
+            paymentModal.classList.add('hidden');
+        });
+
+        // Copy account number
+        copyAccount.addEventListener('click', function() {
+            navigator.clipboard.writeText('5514538163');
+            alert('Account number copied to clipboard!');
+        });
+
+        // Payment confirmed
+        paymentConfirmed.addEventListener('click', function() {
+            paymentModal.classList.add('hidden');
+            profilePage.classList.add('hidden');
+            quizPage.classList.remove('hidden');
+            
+            // Setup quiz
+            setupQuiz();
+        });
+
+        // Close results modal
+        closeResults.addEventListener('click', function() {
+            resultsModal.classList.add('hidden');
+            quizPage.classList.add('hidden');
+            profilePage.classList.remove('hidden');
+        });
+
+        // Previous question button
+        prevQuestion.addEventListener('click', function() {
+            if (currentQuiz.currentQuestion > 0) {
+                currentQuiz.currentQuestion--;
+                displayQuestion();
+            }
+        });
+
+        // Next question button
+        nextQuestion.addEventListener('click', function() {
+            if (currentQuiz.currentQuestion < currentQuiz.questions.length - 1) {
+                currentQuiz.currentQuestion++;
+                displayQuestion();
+            }
+        });
+
+        // Submit quiz button
+        submitQuiz.addEventListener('click', function() {
+            clearInterval(currentQuiz.timer);
+            currentQuiz.submissionTime = new Date();
+            showResults();
+        });
+
+        // Format date and time for Nigeria
+        function formatNigerianDateTime(date) {
+            const options = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Africa/Lagos'
+            };
+            
+            return date.toLocaleString('en-NG', options);
+        }
+
+        // Check if quiz is open based on current time
+        function isQuizOpen() {
+            const now = new Date();
+            // Convert to Nigerian time (WAT is UTC+1)
+            const nigerianHour = (now.getUTCHours() + 1) % 24;
+            
+            // Quiz is open from 12am to 3pm (0-15 hours)
+            return nigerianHour >= 0 && nigerianHour < 15;
+        }
+
+        // Calculate time until next open or close
+        function getTimeUntilNextChange() {
+            const now = new Date();
+            // Convert to Nigerian time (WAT is UTC+1)
+            const nigerianHour = (now.getUTCHours() + 1) % 24;
+            const nigerianMinute = now.getUTCMinutes();
+            const nigerianSecond = now.getUTCSeconds();
+            
+            let hoursRemaining, minutesRemaining, secondsRemaining;
+            
+            if (isQuizOpen()) {
+                // Calculate time until 3pm (15:00)
+                hoursRemaining = 14 - nigerianHour;
+                minutesRemaining = 59 - nigerianMinute;
+                secondsRemaining = 59 - nigerianSecond;
+            } else {
+                // Calculate time until 12am (00:00)
+                hoursRemaining = 23 - nigerianHour;
+                minutesRemaining = 59 - nigerianMinute;
+                secondsRemaining = 59 - nigerianSecond;
+            }
+            
+            return {
+                hours: hoursRemaining,
+                minutes: minutesRemaining,
+                seconds: secondsRemaining
+            };
+        }
+
+        // Start countdown timer for quiz availability
+        function startCountdownTimer() {
+            const countdownTimer = document.getElementById('countdown-timer');
+            const countdownStatus = document.getElementById('countdown-status');
+            
+            // Set initial status based on current time
+            const quizOpen = isQuizOpen();
+            countdownStatus.textContent = quizOpen ? 'Open until 3:00 PM' : 'Closed until 12:00 AM';
+            
+            // Enable or disable package buttons based on quiz availability
+            document.querySelectorAll('.payment-btn').forEach(btn => {
+                btn.disabled = !quizOpen;
+                if (!quizOpen) {
+                    btn.classList.add('bg-gray-400');
+                    btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                } else {
+                    btn.classList.remove('bg-gray-400');
+                    btn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                }
+            });
+            
+            // Get initial time remaining
+            let timeRemaining = getTimeUntilNextChange();
+            let hoursRemaining = timeRemaining.hours;
+            let minutesRemaining = timeRemaining.minutes;
+            let secondsRemaining = timeRemaining.seconds;
+            
+            function updateCountdown() {
+                // Format time
+                const hours = String(hoursRemaining).padStart(2, '0');
+                const minutes = String(minutesRemaining).padStart(2, '0');
+                const seconds = String(secondsRemaining).padStart(2, '0');
+                
+                // Update display
+                countdownTimer.querySelector('.timer-text').textContent = `${hours}:${minutes}:${seconds}`;
+                
+                // Update progress circle
+                const totalSeconds = quizOpen ? 15 * 60 * 60 : 9 * 60 * 60; // 15 hours when open, 9 hours when closed
+                const remainingSeconds = (hoursRemaining * 60 * 60) + (minutesRemaining * 60) + secondsRemaining;
+                const progress = (1 - (remainingSeconds / totalSeconds)) * 100;
+                countdownTimer.style.background = `conic-gradient(#4f46e5 ${progress}%, transparent ${progress}%)`;
+                
+                // Decrease time
+                if (secondsRemaining > 0) {
+                    secondsRemaining--;
+                } else if (minutesRemaining > 0) {
+                    minutesRemaining--;
+                    secondsRemaining = 59;
+                } else if (hoursRemaining > 0) {
+                    hoursRemaining--;
+                    minutesRemaining = 59;
+                    secondsRemaining = 59;
+                } else {
+                    // Time's up, switch state
+                    const newQuizOpen = !quizOpen;
+                    countdownStatus.textContent = newQuizOpen ? 'Open until 3:00 PM' : 'Closed until 12:00 AM';
+                    
+                    // Enable or disable package buttons
+                    document.querySelectorAll('.payment-btn').forEach(btn => {
+                        btn.disabled = !newQuizOpen;
+                        if (!newQuizOpen) {
+                            btn.classList.add('bg-gray-400');
+                            btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                        } else {
+                            btn.classList.remove('bg-gray-400');
+                            btn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                        }
+                    });
+                    
+                    // Reset timer for next period
+                    timeRemaining = getTimeUntilNextChange();
+                    hoursRemaining = timeRemaining.hours;
+                    minutesRemaining = timeRemaining.minutes;
+                    secondsRemaining = timeRemaining.seconds;
+                }
+            }
+            
+            // Initial update
+            updateCountdown();
+            
+            // Update every second
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Setup quiz
+        function setupQuiz() {
+            // Shuffle questions and take 50
+            currentQuiz.questions = [...quizQuestions]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 50);
+            
+            // Reset answers array
+            currentQuiz.answers = Array(currentQuiz.questions.length).fill(null);
+            
+            // Set current question to first
+            currentQuiz.currentQuestion = 0;
+            
+            // Set time remaining
+            currentQuiz.timeRemaining = currentQuiz.timeLimit;
+            
+            // Update UI
+            document.getElementById('quiz-package-name').textContent = 
+                `${capitalizeFirstLetter(currentQuiz.package)} Package (₦${currentQuiz.amount})`;
+            document.getElementById('total-questions').textContent = currentQuiz.questions.length;
+            
+            // Display first question
+            displayQuestion();
+            
+            // Start timer
+            startQuizTimer();
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = currentQuiz.questions[currentQuiz.currentQuestion];
+            
+            // Update question number
+            document.getElementById('current-question-num').textContent = currentQuiz.currentQuestion + 1;
+            
+            // Update question text
+            document.getElementById('question-text').textContent = question.question;
+            
+            // Clear options container
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            // Add options
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option border border-gray-300 rounded-md p-3 cursor-pointer';
+                if (currentQuiz.answers[currentQuiz.currentQuestion] === index) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                optionDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full border-2 border-indigo-600 flex items-center justify-center mr-3">
+                            ${currentQuiz.answers[currentQuiz.currentQuestion] === index ? 
+                                '<div class="w-3 h-3 rounded-full bg-indigo-600"></div>' : ''}
+                        </div>
+                        <div>${option}</div>
+                    </div>
+                `;
+                
+                optionDiv.addEventListener('click', function() {
+                    // Save answer
+                    currentQuiz.answers[currentQuiz.currentQuestion] = index;
+                    
+                    // Update UI
+                    document.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.querySelector('.w-6').innerHTML = '';
+                    });
+                    
+                    optionDiv.classList.add('selected');
+                    optionDiv.querySelector('.w-6').innerHTML = '<div class="w-3 h-3 rounded-full bg-indigo-600"></div>';
+                });
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Update button states
+            prevQuestion.disabled = currentQuiz.currentQuestion === 0;
+            prevQuestion.classList.toggle('opacity-50', currentQuiz.currentQuestion === 0);
+            
+            nextQuestion.textContent = currentQuiz.currentQuestion === currentQuiz.questions.length - 1 ? 'Finish' : 'Next';
+        }
+
+        // Start quiz timer
+        function startQuizTimer() {
+            const timerElement = document.getElementById('quiz-timer');
+            
+            function updateTimer() {
+                const minutes = Math.floor(currentQuiz.timeRemaining / 60);
+                const seconds = currentQuiz.timeRemaining % 60;
+                
+                timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (currentQuiz.timeRemaining <= 0) {
+                    clearInterval(currentQuiz.timer);
+                    currentQuiz.submissionTime = new Date();
+                    showResults();
+                } else {
+                    currentQuiz.timeRemaining--;
+                }
+            }
+            
+            // Initial update
+            updateTimer();
+            
+            // Update every second
+            currentQuiz.timer = setInterval(updateTimer, 1000);
+        }
+
+        // Show quiz results
+        function showResults() {
+            // Calculate score
+            let correctAnswers = 0;
+            currentQuiz.questions.forEach((question, index) => {
+                if (currentQuiz.answers[index] === question.correctAnswer) {
+                    correctAnswers++;
+                }
+            });
+            
+            const totalQuestions = currentQuiz.questions.length;
+            const scorePercentage = Math.round((correctAnswers / totalQuestions) * 100);
+            const passed = scorePercentage >= 80;
+            
+            // Format submission time for Nigeria
+            const submissionTimeFormatted = formatNigerianDateTime(currentQuiz.submissionTime);
+            
+            // Create confetti for success
+            if (passed) {
+                createConfetti();
+            }
+            
+            // Update results content
+            const resultsContent = document.getElementById('results-content');
+            resultsContent.innerHTML = `
+                <div class="text-center">
+                    <div class="mb-4">
+                        ${passed ? 
+                            `<svg class="w-16 h-16 text-green-500 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h3 class="text-2xl font-bold text-green-600 mt-2">Congratulations!</h3>` 
+                            : 
+                            `<svg class="w-16 h-16 text-red-500 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h3 class="text-2xl font-bold text-red-600 mt-2">Try Again Later</h3>`
+                        }
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="text-4xl font-bold ${passed ? 'text-green-600' : 'text-red-600'}">${scorePercentage}%</div>
+                        <div class="text-gray-600 mt-1">Your Score</div>
+                    </div>
+                    
+                    <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                        <div class="flex justify-between mb-2">
+                            <div class="text-gray-600">Correct Answers:</div>
+                            <div class="font-medium">${correctAnswers}</div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div class="text-gray-600">Total Questions:</div>
+                            <div class="font-medium">${totalQuestions}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4 text-left">
+                        <div class="text-sm text-blue-800">
+                            <span class="font-medium">Submission Time:</span><br>
+                            ${submissionTimeFormatted}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4 text-left">
+                        <div class="font-medium text-yellow-800 mb-2">Important Instructions:</div>
+                        <ol class="list-decimal list-inside text-sm text-yellow-700 space-y-1">
+                            <li>Screenshot this result page</li>
+                            <li>Take a picture of your payment slip</li>
+                            <li>Send both images to our email within 10 minutes</li>
+                        </ol>
+                        <div class="mt-3 flex justify-between items-center bg-white rounded p-2">
+                            <div class="text-gray-800">stanleykingsley41@gmail.com</div>
+                            <button id="copy-email" class="text-indigo-600 hover:text-indigo-800">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to copy email button
+            document.getElementById('copy-email').addEventListener('click', function() {
+                navigator.clipboard.writeText('stanleykingsley41@gmail.com');
+                alert('Email copied to clipboard!');
+            });
+            
+            // Show results modal
+            resultsModal.classList.remove('hidden');
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'fixed';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '9999';
+            document.body.appendChild(confettiContainer);
+            
+            const colors = ['#4f46e5', '#7c3aed', '#ec4899', '#f59e0b', '#10b981'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiContainer.appendChild(confetti);
+            }
+            
+            // Remove confetti after animation
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 6000);
+        }
+
+        // Helper function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96700b5bc05700b1',t:'MTc1MzgyODA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
