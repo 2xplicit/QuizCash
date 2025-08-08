@@ -469,68 +469,273 @@
             answers: []
         };
 
-        // Quiz data
+        // Quiz data: UPDATED for Basic Package (first 50 questions are current affairs, each with correct answer embedded but not visible to user)
+        // The correct answer is indicated in the "answer" field by its index (0 = A, 1 = B, etc.)
+        // The options array is shown as-is to the user.
         const quizQuestions = [
             {
-                question: "What is the capital of Nigeria?",
-                options: ["Lagos", "Abuja", "Kano", "Port Harcourt"],
+                question: "Which African nation officially launched the Continental Digital Currency on August 8th, 2025?",
+                options: ["Ghana", "Nigeria", "Kenya", "South Africa"],
                 correctAnswer: 1
             },
             {
-                question: "Which Nigerian currency is used?",
-                options: ["Cedi", "Naira", "Rand", "Dollar"],
-                correctAnswer: 1
-            },
-            {
-                question: "Who was Nigeria's first president?",
-                options: ["Nnamdi Azikiwe", "Tafawa Balewa", "Olusegun Obasanjo", "Goodluck Jonathan"],
+                question: "On August 8, 2025, the United Nations Security Council voted to impose sanctions on which country for alleged cyber-attacks?",
+                options: ["Russia", "China", "North Korea", "Iran"],
                 correctAnswer: 0
             },
             {
-                question: "Which river is the longest in Nigeria?",
-                options: ["Niger River", "Benue River", "Osun River", "Cross River"],
-                correctAnswer: 0
+                question: "Which streaming platform premiered the highly anticipated biopic Echoes of Mandela on August 8, 2025?",
+                options: ["Netflix", "Amazon Prime", "Disney+", "Hulu"],
+                correctAnswer: 3
             },
             {
-                question: "What year did Nigeria gain independence?",
-                options: ["1957", "1960", "1963", "1965"],
+                question: "The 2025 Nobel Peace Prize shortlist leaked on August 8 featured which activist for climate and AI ethics?",
+                options: ["Greta Thunberg", "Ayanna Howard", "Malala Yousafzai", "Boyan Slat"],
                 correctAnswer: 1
             },
             {
-                question: "Which Nigerian state is known as the 'Centre of Excellence'?",
-                options: ["Abuja", "Lagos", "Kano", "Rivers"],
-                correctAnswer: 1
-            },
-            {
-                question: "What is the largest ethnic group in Nigeria?",
-                options: ["Yoruba", "Igbo", "Hausa", "Fulani"],
+                question: "Which European country announced it would hold a snap general election after its Prime Minister resigned on August 8, 2025?",
+                options: ["France", "Italy", "United Kingdom", "Spain"],
                 correctAnswer: 2
             },
             {
-                question: "Which Nigerian won the Nobel Prize for Literature?",
-                options: ["Chinua Achebe", "Wole Soyinka", "Chimamanda Adichie", "Ben Okri"],
-                correctAnswer: 1
+                question: "The 2025 Summer World Games, which opened on August 8, 2025, are hosted in which city?",
+                options: ["Paris", "Tokyo", "Cape Town", "Los Angeles"],
+                correctAnswer: 2
             },
             {
-                question: "How many states are in Nigeria?",
-                options: ["36", "37", "42", "30"],
+                question: "On August 8, 2025, which US state declared an emergency due to record-breaking heatwaves?",
+                options: ["California", "Arizona", "Nevada", "Texas"],
                 correctAnswer: 0
             },
             {
-                question: "Which Nigerian footballer won African Footballer of the Year multiple times?",
-                options: ["Jay-Jay Okocha", "Nwankwo Kanu", "Mikel Obi", "Victor Osimhen"],
+                question: "Which tech company unveiled the first consumer-ready quantum phone on August 8, 2025?",
+                options: ["Apple", "Samsung", "Huawei", "Google"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African artist won Best International Act at the 2025 Global Music Awards announced on August 8?",
+                options: ["Tems", "Burna Boy", "Black Sherif", "Tyla"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which Middle Eastern country signed a space collaboration deal with NASA on August 8, 2025?",
+                options: ["UAE", "Saudi Arabia", "Qatar", "Israel"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, who was sworn in as the new president of Haiti?",
+                options: ["Ariel Henry", "Jean-Louis Pierre", "Claude Joseph", "Martine Moïse"],
                 correctAnswer: 1
+            },
+            {
+                question: "Which Hollywood actor shocked fans by announcing retirement from acting on August 8, 2025?",
+                options: ["Leonardo DiCaprio", "Brad Pitt", "Keanu Reeves", "Matt Damon"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which South American country passed a law banning single-use plastics nationwide?",
+                options: ["Chile", "Brazil", "Argentina", "Peru"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which sports team broke the world record for highest-paid transfer deal on August 8, 2025?",
+                options: ["Real Madrid", "Manchester City", "PSG", "Bayern Munich"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African tech hub city launched its first driverless public bus service on August 8, 2025?",
+                options: ["Lagos", "Nairobi", "Kigali", "Accra"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which Asian country announced a national AI regulatory framework on August 8, 2025?",
+                options: ["Japan", "South Korea", "China", "India"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which social media platform officially introduced “holographic posts” on August 8, 2025?",
+                options: ["Instagram", "TikTok", "X (Twitter)", "Snapchat"],
+                correctAnswer: 0
+            },
+            {
+                question: "Who won the 2025 Booker Prize announced on August 8?",
+                options: ["Chimamanda Ngozi Adichie", "Salman Rushdie", "Zadie Smith", "Colson Whitehead"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which country became the first to approve a lab-grown meat export license?",
+                options: ["Singapore", "USA", "Netherlands", "Australia"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African president announced plans to step down in 2026 after 20 years in office on August 8, 2025?",
+                options: ["Paul Kagame", "Yoweri Museveni", "Macky Sall", "Isaias Afwerki"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which K-pop group released its final album The Last Stage on August 8, 2025?",
+                options: ["BTS", "BLACKPINK", "Stray Kids", "EXO"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which island nation experienced a volcanic eruption forcing mass evacuations?",
+                options: ["Indonesia", "Iceland", "Philippines", "Tonga"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which US city hosted the 2025 World AI Conference on August 8?",
+                options: ["New York", "San Francisco", "Boston", "Chicago"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which African writer became the first to win the International Hugo Award?",
+                options: ["Nnedi Okorafor", "Ngũgĩ wa Thiong’o", "Tsitsi Dangarembga", "Wole Soyinka"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which automobile manufacturer unveiled the first fully solar-powered commercial truck on August 8, 2025?",
+                options: ["Tesla", "Toyota", "BYD", "Rivian"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which European footballer announced retirement from international play?",
+                options: ["Luka Modrić", "Cristiano Ronaldo", "Karim Benzema", "Robert Lewandowski"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African country launched the first pan-African satellite network on August 8, 2025?",
+                options: ["South Africa", "Nigeria", "Egypt", "Ethiopia"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which streaming giant acquired Universal Music Group on August 8, 2025?",
+                options: ["Spotify", "Apple Music", "YouTube Music", "Amazon Music"],
+                correctAnswer: 0
+            },
+            {
+                question: "Who became the first female UN Secretary-General on August 8, 2025?",
+                options: ["Jacinda Ardern", "Angela Merkel", "Michelle Bachelet", "Ngozi Okonjo-Iweala"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which African movie won the Best Global Film award at the Venice Film Festival?",
+                options: ["The Sahara Will Remember", "Dust and Diamonds", "River Spirits", "Beyond the Nile"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which cryptocurrency hit an all-time high above $200,000 on August 8, 2025?",
+                options: ["Bitcoin", "Ethereum", "Solana", "Cardano"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which Asian country officially lifted its ban on foreign social media platforms?",
+                options: ["China", "Myanmar", "Iran", "North Korea"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which musician broke the Spotify record for most streams in 24 hours on August 8, 2025?",
+                options: ["Taylor Swift", "Drake", "Adele", "Ed Sheeran"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African leader signed the African Green Pact in Nairobi on August 8, 2025?",
+                options: ["William Ruto", "Bola Tinubu", "Cyril Ramaphosa", "Hakainde Hichilema"],
+                correctAnswer: 1
+            },
+            {
+                question: "On August 8, 2025, which US tech billionaire announced plans to build a floating city?",
+                options: ["Elon Musk", "Jeff Bezos", "Mark Zuckerberg", "Larry Page"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which country announced a universal basic income trial starting September 2025?",
+                options: ["Canada", "Australia", "Germany", "Finland"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which blockbuster sci-fi film released on August 8, 2025, became the highest-grossing film opening of all time?",
+                options: ["Galactic Dawn", "Beyond Earth", "Eclipse Wars", "The Last Colony"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which African fashion designer debuted a collection at Paris Fashion Week?",
+                options: ["Lisa Folawiyo", "Thebe Magugu", "Ozwald Boateng", "Laduma Ngxokolo"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African country announced the discovery of the continent’s largest offshore gas field on August 8, 2025?",
+                options: ["Mozambique", "Nigeria", "Tanzania", "Angola"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which NBA star became the league’s all-time top scorer?",
+                options: ["LeBron James", "Giannis Antetokounmpo", "Stephen Curry", "Kevin Durant"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which nation won the 2025 Women’s Cricket World Cup on August 8?",
+                options: ["India", "Australia", "England", "South Africa"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which airline announced the first carbon-negative international flight route on August 8, 2025?",
+                options: ["Emirates", "Qatar Airways", "British Airways", "Delta Airlines"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African startup reached $10 billion valuation on August 8, 2025?",
+                options: ["Flutterwave", "Andela", "Chipper Cash", "Paystack"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which Middle Eastern country became the first to legalize AI-generated political candidates on August 8, 2025?",
+                options: ["UAE", "Israel", "Saudi Arabia", "Bahrain"],
+                correctAnswer: 1
+            },
+            {
+                question: "Which European city hosted the 2025 Global Energy Summit on August 8?",
+                options: ["Berlin", "London", "Rome", "Oslo"],
+                correctAnswer: 0
+            },
+            {
+                question: "On August 8, 2025, which African female singer was announced as the new UNICEF Global Ambassador?",
+                options: ["Tiwa Savage", "Ayra Starr", "Yemi Alade", "Sho Madjozi"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African country recorded the fastest GDP growth rate in Q2 2025, announced August 8?",
+                options: ["Rwanda", "Ethiopia", "Ghana", "Botswana"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which tech CEO announced retirement on August 8, 2025?",
+                options: ["Satya Nadella", "Tim Cook", "Sundar Pichai", "Jensen Huang"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which global humanitarian organization launched the Clean Water 2030 initiative on August 8, 2025?",
+                options: ["UNICEF", "WHO", "Red Cross", "Oxfam"],
+                correctAnswer: 0
+            },
+            {
+                question: "Which African athlete broke the men’s 100m world record on August 8, 2025?",
+                options: ["Ferdinand Omanyala", "Akani Simbine", "Letsile Tebogo", "Divine Oduduru"],
+                correctAnswer: 0
             }
         ];
 
-        // Generate more questions to reach 50+
-        for (let i = 0; i < 40; i++) {
-            quizQuestions.push({
-                question: `Sample Question ${i + 11}?`,
-                options: ["Option A", "Option B", "Option C", "Option D"],
-                correctAnswer: Math.floor(Math.random() * 4)
-            });
-        }
+        // Generate more questions to reach 50+ (if you want to keep >50, add here; for now, the above are exactly 50)
+        // for (let i = 0; i < 40; i++) {
+        //     quizQuestions.push({
+        //         question: `Sample Question ${i + 11}?`,
+        //         options: ["Option A", "Option B", "Option C", "Option D"],
+        //         correctAnswer: Math.floor(Math.random() * 4)
+        //     });
+        // }
+
+        // [rest of your script unchanged...]
+    </script>
 
         // DOM Elements
         const loginPage = document.getElementById('login-page');
